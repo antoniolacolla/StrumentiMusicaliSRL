@@ -11,33 +11,55 @@
 <main>
     <div class="container">
         <h1>Gestione Ordini</h1>
-        <table>
-            <thead>
-            <tr><th>ID Ordine</th><th>ID Utente</th><th>Data</th><th>Totale</th><th>Stato Attuale</th><th>Aggiorna Stato</th></tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${listaOrdini}" var="ordine">
-                <tr>
-                    <td>#${ordine.id}</td>
-                    <td>${ordine.idUtente}</td>
-                    <td>${ordine.data}</td>
-                    <td>${ordine.totale} €</td>
-                    <td><span class="status status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span></td>
-                    <td>
-                        <form action="${pageContext.request.contextPath}/admin/gestione-ordine" method="POST">
-                            <input type="hidden" name="idOrdine" value="${ordine.id}">
-                            <select name="nuovoStato">
-                                <option value="In elaborazione" ${ordine.stato == 'In elaborazione' ? 'selected' : ''}>In elaborazione</option>
-                                <option value="Spedito" ${ordine.stato == 'Spedito' ? 'selected' : ''}>Spedito</option>
-                                <option value="Consegnato" ${ordine.stato == 'Consegnato' ? 'selected' : ''}>Consegnato</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary">Salva</button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+
+        <c:choose>
+            <c:when test="${empty listaOrdini}">
+                <p>Nessun ordine presente nel sistema.</p>
+            </c:when>
+            <c:otherwise>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID Ordine</th>
+                        <th>ID Utente</th>
+                        <th>Data</th>
+                        <th>Totale</th>
+                        <th>Stato Attuale</th>
+                        <th>Aggiorna Stato</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${listaOrdini}" var="ordine">
+                        <tr>
+                            <td>#${ordine.id}</td>
+                            <td>${ordine.idUtente}</td>
+                            <td>${ordine.data}</td>
+                            <td>${ordine.totale} €</td>
+                            <td>
+                                <span class="status status-${ordine.stato.toLowerCase().replace(' ', '-')}">${ordine.stato}</span>
+                            </td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/admin/gestione-ordine" method="POST">
+                                    <input type="hidden" name="idOrdine" value="${ordine.id}">
+                                    <select name="nuovoStato">
+                                        <option value="In elaborazione" ${ordine.stato == 'In elaborazione' ? 'selected' : ''}>In elaborazione</option>
+                                        <option value="Spedito" ${ordine.stato == 'Spedito' ? 'selected' : ''}>Spedito</option>
+                                        <option value="Consegnato" ${ordine.stato == 'Consegnato' ? 'selected' : ''}>Consegnato</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Salva</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="${pageContext.request.contextPath}/" class="btn btn-secondary">Torna alla Home</a>
+        </div>
+
     </div>
 </main>
 <jsp:include page="/jsp/partials/footer.jsp"/>

@@ -1,5 +1,7 @@
 package com.Strumentimusicali.model;
 
+import java.util.Objects;
+
 public class Strumento {
     private int id;
     private String nome;
@@ -12,7 +14,7 @@ public class Strumento {
     private boolean inVetrina;
     private boolean attivo;
 
-    // Getters e Setters...
+    // Getters e Setters... (invariati)
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getNome() { return nome; }
@@ -33,4 +35,19 @@ public class Strumento {
     public void setInVetrina(boolean inVetrina) { this.inVetrina = inVetrina; }
     public boolean isAttivo() { return attivo; }
     public void setAttivo(boolean attivo) { this.attivo = attivo; }
+
+    // --- NUOVI METODI FONDAMENTALI ---
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Strumento strumento = (Strumento) o;
+        return id == strumento.id; // Due strumenti sono uguali se hanno lo stesso ID
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id); // L'hashCode si basa solo sull'ID
+    }
 }

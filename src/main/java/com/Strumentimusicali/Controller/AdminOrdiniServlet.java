@@ -20,7 +20,10 @@ public class AdminOrdiniServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Recupera la lista di tutti gli ordini
         request.setAttribute("listaOrdini", ordineDAO.trovaTutti());
+
+        // Inoltra alla pagina JSP della dashboard
         request.getRequestDispatcher("/jsp/admin_ordini.jsp").forward(request, response);
     }
 }

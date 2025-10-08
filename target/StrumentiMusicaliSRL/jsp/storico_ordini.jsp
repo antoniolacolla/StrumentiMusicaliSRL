@@ -19,6 +19,7 @@
                 <div style="text-align: center; padding: 40px 0;">
                     <p>Non hai ancora effettuato nessun ordine.</p>
                     <a href="${pageContext.request.contextPath}/catalogo" class="btn btn-primary" style="margin-top: 20px;">Inizia gli Acquisti</a>
+                    <a href="${pageContext.request.contextPath}/" class="btn btn-secondary" style="margin-top: 20px;">Torna alla Home</a>
                 </div>
             </c:when>
 
@@ -50,6 +51,10 @@
                     </c:forEach>
                     </tbody>
                 </table>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="${pageContext.request.contextPath}/" class="btn btn-secondary">Torna alla Home</a>
+                </div>
             </c:otherwise>
         </c:choose>
     </div>
