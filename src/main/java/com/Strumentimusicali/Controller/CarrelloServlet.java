@@ -4,7 +4,6 @@ import com.Strumentimusicali.DAO.StrumentoDAO;
 import com.Strumentimusicali.DAO.impl.StrumentoDAOImpl;
 import com.Strumentimusicali.model.Carrello;
 import com.Strumentimusicali.model.Strumento;
-import com.Strumentimusicali.model.Utente;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,6 +22,16 @@ public class CarrelloServlet extends HttpServlet {
         this.strumentoDAO = new StrumentoDAOImpl();
     }
 
+    // --- NUOVO METODO AGGIUNTO ---
+    // Questo metodo gestisce le richieste GET, usate per VISUALIZZARE la pagina.
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Il suo unico compito è inoltrare la richiesta alla pagina JSP del carrello.
+        // I dati del carrello sono già nella sessione, quindi la JSP li troverà.
+        request.getRequestDispatcher("/jsp/carrello.jsp").forward(request, response);
+    }
+
+    // Questo metodo gestisce le richieste POST, usate per MODIFICARE il carrello.
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -33,30 +42,44 @@ public class CarrelloServlet extends HttpServlet {
         }
 
         String action = request.getParameter("action");
-        int idProdotto = Integer.parseInt(request.getParameter("prodottoId"));
+        if (action == null) {
+            response.sendRedirect(request.getContextPath() + "/");
+            return;
+        }
 
-        // CORREZIONE: Usa il metodo in italiano
-        Strumento strumento = strumentoDAO.trovaPerId(idProdotto);
-
-        if (strumento != null) {
+        try {
             switch (action) {
                 case "add":
-                    int quantita = 1;
-                    String quantitaParam = request.getParameter("quantita");
-                    if (quantitaParam != null && !quantitaParam.isEmpty()) {
-                        quantita = Integer.parseInt(quantitaParam);
+                    int prodottoIdAdd = Integer.parseInt(request.getParameter("prodottoId"));
+                    int quantita = 1; // Di default aggiunge 1, potresti renderlo configurabile
+                    Strumento strumentoToAdd = strumentoDAO.trovaPerId(prodottoIdAdd);
+                    if (strumentoToAdd != null) {
+                        carrello.aggiungiProdotto(strumentoToAdd, quantita);
+                        session.setAttribute("messaggio", "Prodotto '" + strumentoToAdd.getNome() + "' aggiunto al carrello!");
+                        session.setAttribute("tipoMessaggio", "successo");
                     }
-                    carrello.aggiungiProdotto(strumento, quantita);
+                    response.sendRedirect(request.getContextPath() + "/catalogo");
                     break;
-                case "remove":
-                    carrello.rimuoviProdotto(idProdotto);
-                    break;
+
                 case "update":
+                    int prodottoIdUpdate = Integer.parseInt(request.getParameter("prodottoId"));
                     int nuovaQuantita = Integer.parseInt(request.getParameter("quantita"));
-                    carrello.aggiornaQuantita(strumento, nuovaQuantita);
+                    Strumento strumentoToUpdate = strumentoDAO.trovaPerId(prodottoIdUpdate);
+                    if (strumentoToUpdate != null) {
+                        carrello.aggiornaQuantita(strumentoToUpdate, nuovaQuantita);
+                    }
+                    response.sendRedirect(request.getContextPath() + "/carrello");
+                    break;
+
+                case "remove":
+                    int prodottoIdRemove = Integer.parseInt(request.getParameter("prodottoId"));
+                    carrello.rimuoviProdotto(prodottoIdRemove);
+                    response.sendRedirect(request.getContextPath() + "/carrello");
                     break;
             }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/carrello");
         }
-        response.sendRedirect(request.getContextPath() + "/jsp/carrello.jsp");
     }
 }

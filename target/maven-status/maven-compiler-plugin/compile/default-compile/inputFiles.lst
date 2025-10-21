@@ -8,6 +8,7 @@
 /Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/model/Ordine.java
 /Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/DAO/ConnectionManager.java
 /Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/Controller/CarrelloServlet.java
+/Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/Util/PasswordUtil.java
 /Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/Controller/RegistrazioneServlet.java
 /Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/Controller/AdminCatalogoServlet.java
 /Users/antonio.lacolla/Desktop/StrumentiMusicaliSRL/src/main/java/com/Strumentimusicali/Controller/GestioneOrdineServlet.java
